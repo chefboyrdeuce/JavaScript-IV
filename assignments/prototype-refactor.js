@@ -6,38 +6,42 @@ Prototype Refactor
 
 2. Your goal is to refactor all of this code to use ES6 Classes. The console.log() statements should still return what is expected of them.
 
+
 */
 
-function GameObject(attributes){ // function GameObject(name, dimensions) {
-    this.createdAt = new Date(); //I'm assuming some sort of time method goes here
-    this.name = attributes.name; 
-    this.dimensions = attributes.dimensions;
-    this.destroy = function() {
-      return `${this.name} was removed from the game.` // string template
-    };
+class GameObject {
+    constructor(attributes) {
+        this.createdAt = new Date(); 
+        // this.name = attributes.name; 
+        this.dimensions = attributes.dimensions;
+        }   
+        destroy() {
+          return `${this.name} was removed from the game.` 
+        };
+} 
+ 
+class CharacterStats extends GameObject{
+    constructor(attributes) {
+        super(attributes); 
+        this.healthPoints = attributes.healthPoints;
+        this.name = attributes.name;
+        }   
+        takeDamage() {
+          return `${this.name} took damage.`
+        };
 }
-  
-function CharacterStats(attributes) { // function CharacterStats(healthPoints, name, dimensions) {
-    GameObject.call(this, attributes); // old-fashioned super function
-    this.healthPoints = attributes.healthPoints;
-    this.takeDamage = function() {
-      return `${this.name} took damage.` // string template literal
-    };
+ 
+class Humanoid extends CharacterStats {
+    constructor(attributes) {
+        super(attributes); 
+        this.team = attributes.team;
+        this.weapons = attributes.weapons; 
+        this.language = attributes.language;
+        }
+        greet() {
+          return `${this.name} offers a greeting in ${this.language}.`
+        };
 }
-  
-CharacterStats.prototype = Object.create(GameObject.prototype); // this is old-fashioned extends function
-  
-function Humanoid(attributes) { // function Humanoid(team, weapons, language, healthPoints, name, dimensions) {
-    CharacterStats.call(this, attributes); //passing arguments to CharacterStats
-    this.team = attributes.team;
-    this.weapons = attributes.weapons; 
-    this.language = attributes.language;
-    this.greet = function() {
-      return `${this.name} offers a greeting in ${this.language}.`
-    };
-}
-  
-Humanoid.prototype = Object.create(CharacterStats.prototype); 
 
 const mage = new Humanoid({
       createdAt: new Date(),
